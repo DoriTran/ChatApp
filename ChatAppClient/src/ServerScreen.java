@@ -138,9 +138,14 @@ public class ServerScreen extends JFrame implements ActionListener {
         table.getColumnModel().getColumn(5).setPreferredWidth(80);
         table.getColumnModel().getColumn(6).setPreferredWidth(80);
 
-        // Table height
+        // Table row height
         table.setRowHeight(30);
 
+        // Table width
+        table.setSize(850, 600);
+        table.setPreferredScrollableViewportSize(new Dimension(table.getPreferredSize().width, 500));
+
+        // Table font
         table.setFont(new Font("Tahoma", Font.PLAIN, 16));
     }
 
