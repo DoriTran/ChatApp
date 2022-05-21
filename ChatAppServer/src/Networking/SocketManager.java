@@ -42,8 +42,6 @@ public class SocketManager {
             new Thread(() -> {
                 try {
                     do {
-                        System.out.println("Waiting for client");
-
                         Socket clientSocket = serverSocket.accept();
 
                         Communicator clientCommunicator = new Communicator(clientSocket);
@@ -51,7 +49,7 @@ public class SocketManager {
 
                     } while (serverSocket != null && !serverSocket.isClosed());
                 } catch (IOException e) {
-                    System.out.println("Server or client socket closed");
+                    /* Do nothing */
                 }
             }).start();
 
@@ -62,11 +60,15 @@ public class SocketManager {
 
     static public void closeServer() {
         try {
-            for (ClientInfo clientInfo : clientInfos)
-                clientInfo.socket.close();
-            serverSocket.close();
+            if (clientInfos != null) {
+                for (ClientInfo clientInfo : clientInfos)
+                    clientInfo.socket.close();
+            }
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            /* Do nothing */
         }
     }
 }

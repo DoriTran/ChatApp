@@ -33,7 +33,9 @@ public class DataManager {
         while ((serverData = bufferedReader.readLine()) != null) {
             String[] server = serverData.split(",");
 
-            serverInfos.addLast(new ServerInfo(server[0], server[1], Integer.parseInt(server[2])));
+            serverInfos.addLast(new ServerInfo(server[0], server[1], Integer.parseInt(server[2]),
+                    ServerInfo.isServerOnline(server[1], Integer.parseInt(server[2]) )));
+
         }
         bufferedReader.close();
 
@@ -59,6 +61,11 @@ public class DataManager {
     }
     public static void editServer(Integer at, ServerInfo serverInfo) {
         serverInfos.set(at, serverInfo);
+    }
+    public static void updateServer() {
+        for (ServerInfo serverInfo : serverInfos) {
+            serverInfo.serverStatus = ServerInfo.isServerOnline(serverInfo.serverIP, serverInfo.serverPort);
+        }
     }
 
     // Data interact

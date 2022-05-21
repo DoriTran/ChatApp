@@ -24,8 +24,8 @@ public class ServerInfo {
         object[0] = serverName;
         object[1] = serverPort;
         object[2] = (serverStatus) ? "Đang hoạt động" : "Không hoạt động";
-        object[3] = "Bật/Tắt";
-        object[4] = "Xóa";
+        object[3] = "Open";
+        object[4] = "Delete";
 
         return object;
     }

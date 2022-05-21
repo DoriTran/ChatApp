@@ -51,8 +51,14 @@ public class DataManager {
     }
 
     // Data handle
-    public static void switchStatusServer(Integer at) {
+    public static void switchStatusServer(int at) {
+        // Swap at AT
         serverInfos.get(at).serverStatus = !serverInfos.get(at).serverStatus;
+        // If not at AT all false
+        for (int i = 0; i < serverInfos.size(); i++) {
+            if (i == at) continue;
+            serverInfos.get(i).serverStatus = false;
+        }
     }
     public static void addServer(ServerInfo serverInfo) {
         serverInfos.addLast(serverInfo);

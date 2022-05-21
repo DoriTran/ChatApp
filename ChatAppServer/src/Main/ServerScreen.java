@@ -27,7 +27,7 @@ public class ServerScreen extends JFrame implements ActionListener {
     private JButton btn_CreateServer;
 
     // Table server
-    private String[] columnServerTable = { "ServerName", "ServerPort", "Trạng thái", "Open/Close", "Delete" };
+    private String[] columnServerTable = { "ServerName", "ServerPort", "Trạng thái", "On/Off", "Delete" };
     private JTable tableServer;
 
     // Table client
@@ -157,7 +157,7 @@ public class ServerScreen extends JFrame implements ActionListener {
 
         // Table Button
         tableServer.getColumnModel().getColumn(3).setCellRenderer(new TableButtonRenderer());
-        tableServer.getColumnModel().getColumn(3).setCellEditor(new TableRenderer(new JCheckBox(), this, "status"));
+        tableServer.getColumnModel().getColumn(3).setCellEditor(new TableRenderer(new JCheckBox(), this, "onoff"));
         tableServer.getColumnModel().getColumn(4).setCellRenderer(new TableButtonRenderer());
         tableServer.getColumnModel().getColumn(4).setCellEditor(new TableRenderer(new JCheckBox(), this, "delete"));
 
@@ -193,7 +193,23 @@ public class ServerScreen extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "status": {
+            case "onoff": {
+                // Close
+                if (tableServer.getValueAt(tableServer.getSelectedRow(), 2).toString().equals("Đang hoạt động")) {
+                    SocketManager.closeServer();
+                }
+                // Open
+                else {
+                    SocketManager.closeServer();
+                    try {
+                        SocketManager.serverInfo = DataManager.serverInfos.get(tableServer.getSelectedRow());
+                        SocketManager.openServer();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Port phải là 1 số nguyên dương", "Lỗi",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+
                 // Switch Status
                 DataManager.switchStatusServer(tableServer.getSelectedRow());
 

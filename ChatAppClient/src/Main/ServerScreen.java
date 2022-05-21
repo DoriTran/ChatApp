@@ -1,3 +1,5 @@
+package Main;
+
 import Data.*;
 import TableButton.TableButtonRenderer;
 import TableButton.TableRenderer;
@@ -93,8 +95,8 @@ public class ServerScreen extends JFrame implements ActionListener {
     // Server Data to Table
     void updateTable() {
         // Update table
+        DataManager.updateServer();
         table.setModel(new DefaultTableModel(DataManager.getObjectsData(), columnNames) {
-
             public boolean isCellEditable(int row, int column)
             {
                 return (column == 4 || column == 5 || column == 6);
@@ -166,37 +168,37 @@ public class ServerScreen extends JFrame implements ActionListener {
                 // ServerName Input
                 JLabel lb_ServerName = new JLabel("ServerNickName");
                 lb_ServerName.setFont(new Font("Tahoma", Font.PLAIN, 16));
-                addServerContent.add(lb_ServerName, status.setGrid(1,1).setInsets(20,10,0,5).setWeight(0, 0));
+                addServerContent.add(lb_ServerName, status.setGrid(1,1).setInsets(20,10,0,5).setWeight(0.0, 0.0));
 
                 JLabel lb_ServerEmpty = new JLabel("Để trống sẽ dùng tên của Server");
                 lb_ServerEmpty.setFont(new Font("Tahoma", Font.PLAIN, 12));
                 lb_ServerEmpty.setForeground(Color.BLUE);
-                addServerContent.add(lb_ServerEmpty, status.setGrid(1,2).setInsets(2,10,0,5).setWeight(0, 0));
+                addServerContent.add(lb_ServerEmpty, status.setGrid(1,2).setInsets(2,10,0,5).setWeight(0.0, 0.0));
 
                 JTextField tf_ServerName = new JTextField();
                 tf_ServerName.setFont(new Font("Tahoma", Font.PLAIN, 16));
                 tf_ServerName.setPreferredSize(new Dimension(200,25));
-                addServerContent.add(tf_ServerName, status.setGrid(1, 3).setInsets(2,10,0,10).setWeight(2, 0));
+                addServerContent.add(tf_ServerName, status.setGrid(1, 3).setInsets(2,10,0,10).setWeight(2.0, 0.0));
 
                 // ServerIP Input
                 JLabel lb_ServerIP = new JLabel("ServerIP");
                 lb_ServerIP.setFont(new Font("Tahoma", Font.PLAIN, 16));
-                addServerContent.add(lb_ServerIP, status.setGrid(1, 4).setInsets(10,10,0,10).setWeight(0, 0));
+                addServerContent.add(lb_ServerIP, status.setGrid(1, 4).setInsets(10,10,0,10).setWeight(0.0, 0.0));
 
                 JTextField tf_ServerIP = new JTextField();
                 tf_ServerIP.setFont(new Font("Tahoma", Font.PLAIN, 16));
                 tf_ServerIP.setPreferredSize(new Dimension(200,25));
-                addServerContent.add(tf_ServerIP, status.setGrid(1, 5).setInsets(2,10,0,10).setWeight(2, 0));
+                addServerContent.add(tf_ServerIP, status.setGrid(1, 5).setInsets(2,10,0,10).setWeight(2.0, 0.0));
 
                 // ServerPort Input
                 JLabel lb_ServerPort = new JLabel("ServerPort");
                 lb_ServerPort.setFont(new Font("Tahoma", Font.PLAIN, 16));
-                addServerContent.add(lb_ServerPort, status.setGrid(1, 6).setInsets(10,10,0,10).setWeight(0, 0));
+                addServerContent.add(lb_ServerPort, status.setGrid(1, 6).setInsets(10,10,0,10).setWeight(0.0, 0.0));
 
                 JTextField tf_ServerPort = new JTextField();
                 tf_ServerPort.setFont(new Font("Tahoma", Font.PLAIN, 16));
                 tf_ServerPort.setPreferredSize(new Dimension(200,25));
-                addServerContent.add(tf_ServerPort, status.setGrid(1, 7).setInsets(2,10,20,10).setWeight(2, 0));
+                addServerContent.add(tf_ServerPort, status.setGrid(1, 7).setInsets(2,10,20,10).setWeight(2.0, 0.0));
 
                 // Button Create
                 JButton btn_CreateServer = new JButton("Create Server");
@@ -243,7 +245,7 @@ public class ServerScreen extends JFrame implements ActionListener {
                 });
                 btn_CreateServer.setFocusPainted(false);
                 addServerContent.add(btn_CreateServer, status.setGrid(1, 8)
-                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0, 0)
+                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0.0, 0.0)
                         .setInsets(5, 10, 10, 10));
 
                 // Add Panel to Dialog
@@ -267,30 +269,31 @@ public class ServerScreen extends JFrame implements ActionListener {
                 // YourName Input
                 JLabel lb_ServerName = new JLabel("Enter your name", SwingConstants.CENTER);
                 lb_ServerName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-                joinServerContent.add(lb_ServerName, status.setGrid(1,1).setInsets(20,10,0,5).setWeight(0, 0));
+                joinServerContent.add(lb_ServerName, status.setGrid(1,1).setInsets(20,10,0,5).setWeight(0.0, 0.0));
 
                 JTextField tf_UserName = new JTextField("", SwingConstants.CENTER);
                 tf_UserName.setFont(new Font("Tahoma", Font.PLAIN, 16));
                 tf_UserName.setPreferredSize(new Dimension(200,25));
-                joinServerContent.add(tf_UserName, status.setGrid(1, 2).setInsets(2,10,0,10).setWeight(2, 0));
+                joinServerContent.add(tf_UserName, status.setGrid(1, 2).setInsets(2,10,0,10).setWeight(2.0, 0.0));
 
                 JLabel lb_ServerEmpty = new JLabel("Tên đại diện cho bạn khi chat với người khác", SwingConstants.CENTER);
                 lb_ServerEmpty.setFont(new Font("Tahoma", Font.PLAIN, 12));
                 lb_ServerEmpty.setForeground(Color.BLUE);
-                joinServerContent.add(lb_ServerEmpty, status.setGrid(1,3).setInsets(2,10,0,5).setWeight(0, 0));
+                joinServerContent.add(lb_ServerEmpty, status.setGrid(1,3).setInsets(2,10,0,5).setWeight(0.0, 0.0));
 
                 // Button Create
                 JButton btn_CreateServer = new JButton("Join Server");
                 btn_CreateServer.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
                         // Getting input data
                         String ServerIP = table.getValueAt(table.getSelectedRow(), 1).toString() ;
                         Integer ServerPort = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 2).toString());
 
                         // Join server
-                        new ChatScreen(tf_UserName.getText());
+
+
+                        Main.chatScreen = new ChatScreen(tf_UserName.getText());
                         setVisible(false);
                         dispose();
 
@@ -301,7 +304,7 @@ public class ServerScreen extends JFrame implements ActionListener {
                 });
                 btn_CreateServer.setFocusPainted(false);
                 joinServerContent.add(btn_CreateServer, status.setGrid(1, 4)
-                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0, 0)
+                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0.0, 0.0)
                         .setInsets(5, 10, 10, 10));
 
                 // Add Panel to Dialog
@@ -325,37 +328,37 @@ public class ServerScreen extends JFrame implements ActionListener {
                 // ServerName Input
                 JLabel lb_ServerName = new JLabel("ServerNickName");
                 lb_ServerName.setFont(new Font("Tahoma", Font.PLAIN, 16));
-                addServerContent.add(lb_ServerName, status.setGrid(1,1).setInsets(20,10,0,5).setWeight(0, 0));
+                addServerContent.add(lb_ServerName, status.setGrid(1,1).setInsets(20,10,0,5).setWeight(0.0, 0.0));
 
                 JLabel lb_ServerEmpty = new JLabel("Để trống sẽ dùng tên của Server");
                 lb_ServerEmpty.setFont(new Font("Tahoma", Font.PLAIN, 12));
                 lb_ServerEmpty.setForeground(Color.BLUE);
-                addServerContent.add(lb_ServerEmpty, status.setGrid(1,2).setInsets(2,10,0,5).setWeight(0, 0));
+                addServerContent.add(lb_ServerEmpty, status.setGrid(1,2).setInsets(2,10,0,5).setWeight(0.0, 0.0));
 
                 JTextField tf_ServerName = new JTextField(table.getValueAt(table.getSelectedRow(), 0).toString());
                 tf_ServerName.setFont(new Font("Tahoma", Font.PLAIN, 16));
                 tf_ServerName.setPreferredSize(new Dimension(200,25));
-                addServerContent.add(tf_ServerName, status.setGrid(1, 3).setInsets(2,10,0,10).setWeight(2, 0));
+                addServerContent.add(tf_ServerName, status.setGrid(1, 3).setInsets(2,10,0,10).setWeight(2.0, 0.0));
 
                 // ServerIP Input
                 JLabel lb_ServerIP = new JLabel("ServerIP");
                 lb_ServerIP.setFont(new Font("Tahoma", Font.PLAIN, 16));
-                addServerContent.add(lb_ServerIP, status.setGrid(1, 4).setInsets(10,10,0,10).setWeight(0, 0));
+                addServerContent.add(lb_ServerIP, status.setGrid(1, 4).setInsets(10,10,0,10).setWeight(0.0, 0.0));
 
                 JTextField tf_ServerIP = new JTextField(table.getValueAt(table.getSelectedRow(), 1).toString());
                 tf_ServerIP.setFont(new Font("Tahoma", Font.PLAIN, 16));
                 tf_ServerIP.setPreferredSize(new Dimension(200,25));
-                addServerContent.add(tf_ServerIP, status.setGrid(1, 5).setInsets(2,10,0,10).setWeight(2, 0));
+                addServerContent.add(tf_ServerIP, status.setGrid(1, 5).setInsets(2,10,0,10).setWeight(2.0, 0.0));
 
                 // ServerPort Input
                 JLabel lb_ServerPort = new JLabel("ServerPort");
                 lb_ServerPort.setFont(new Font("Tahoma", Font.PLAIN, 16));
-                addServerContent.add(lb_ServerPort, status.setGrid(1, 6).setInsets(10,10,0,10).setWeight(0, 0));
+                addServerContent.add(lb_ServerPort, status.setGrid(1, 6).setInsets(10,10,0,10).setWeight(0.0, 0.0));
 
                 JTextField tf_ServerPort = new JTextField(table.getValueAt(table.getSelectedRow(), 2).toString());
                 tf_ServerPort.setFont(new Font("Tahoma", Font.PLAIN, 16));
                 tf_ServerPort.setPreferredSize(new Dimension(200,25));
-                addServerContent.add(tf_ServerPort, status.setGrid(1, 7).setInsets(2,10,20,10).setWeight(2, 0));
+                addServerContent.add(tf_ServerPort, status.setGrid(1, 7).setInsets(2,10,20,10).setWeight(2.0, 0.0));
 
                 // Button Create
                 JButton btn_CreateServer = new JButton("Hoàn tất chỉnh sửa");
@@ -402,7 +405,7 @@ public class ServerScreen extends JFrame implements ActionListener {
                 });
                 btn_CreateServer.setFocusPainted(false);
                 addServerContent.add(btn_CreateServer, status.setGrid(1, 8)
-                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0, 0)
+                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0.0, 0.0)
                         .setInsets(5, 10, 10, 10));
 
                 // Add Panel to Dialog
@@ -427,7 +430,7 @@ public class ServerScreen extends JFrame implements ActionListener {
                 lb_TitleConfirm.setFont(new Font("Tahoma", Font.PLAIN, 20));
                 lb_TitleConfirm.setForeground(new Color(255,64,64));
                 lb_TitleConfirm.setSize(new Dimension(250,30));
-                joinServerContent.add(lb_TitleConfirm, status.setGrid(1,1).setInsets(20,10,20,5).setWeight(0, 0));
+                joinServerContent.add(lb_TitleConfirm, status.setGrid(1,1).setInsets(20,10,20,5).setWeight(0.0, 0.0));
 
                 // Confirm Button
                 JButton btn_DeleteServer = new JButton("Delete Server");
@@ -445,7 +448,8 @@ public class ServerScreen extends JFrame implements ActionListener {
                 });
                 btn_DeleteServer.setFocusPainted(false);
                 joinServerContent.add(btn_DeleteServer, status.setGrid(1, 2)
-                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0, 0)
+                        .setWitdh(2).setFill(GridBagConstraints.NONE).setWeight(0.0, 0.0
+                        )
                         .setInsets(5, 10, 10, 10));
 
                 // Add Panel to Dialog

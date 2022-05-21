@@ -1,5 +1,8 @@
 package Data;
 
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class ServerInfo {
@@ -41,19 +44,37 @@ public class ServerInfo {
         return (server.serverIP.equals(this.serverIP) && server.serverPort.equals(this.serverPort));
     }
 
-    public static ArrayList<ServerInfo> getTestServerInfo() {
-        ArrayList<ServerInfo> testData = new ArrayList<>();
+    public static boolean isServerOnline(String ip, int port) {
+        try {
+            Socket s = new Socket();
+            s.connect(new InetSocketAddress(ip, port), 300);
+            s.close();
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
 
-        testData.add(new ServerInfo("Server A", "localhost", 1000, true));
-        testData.add(new ServerInfo("Server B", "localhost", 1001, true));
-        testData.add(new ServerInfo("Server C", "localhost", 1002, false));
-        testData.add(new ServerInfo("Server D", "localhost", 1003, true));
-        testData.add(new ServerInfo("Server E", "localhost", 1004, true));
-        testData.add(new ServerInfo("Server F", "localhost", 1005, false));
-        testData.add(new ServerInfo("Server G", "localhost", 1006, true));
-        testData.add(new ServerInfo("Server H", "localhost", 1007, false));
-        testData.add(new ServerInfo("Server I", "localhost", 1008, true));
+    public static String getServerName(String ip, int port) {
 
-        return testData;
+        if (!isServerOnline(ip, port))
+            return "";
+
+        try {
+            Socket socket = new Socket(ip, port);
+            BufferedReader receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter sender = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+            sender.write("get name");
+            sender.newLine();
+            sender.flush();
+
+            String name = receiver.readLine();
+
+            socket.close();
+            return name;
+        } catch (IOException ex) {
+            return "";
+        }
     }
 }
