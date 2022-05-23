@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.*;
@@ -46,21 +47,27 @@ public class SocketManager {
     // Login to server & wait for header
     public void Login() {
         try {
-            sender.write("new login");
-            sender.newLine();
-            sender.write(userName);
-            sender.newLine();
+            // Send Header
+            sender.write("user login"); sender.newLine();
+            sender.write(userName); sender.newLine();
             sender.flush();
 
+            // Wait Content
             String loginResult = receiver.readLine();
-            if (loginResult.equals("login success")) {
+            if (loginResult.equals("user login success")) {
+                // Total user
                 int currentOnlineUser = Integer.parseInt(receiver.readLine());
-                for (int i = 0; i < currentOnlineUser; i++)
-                    this.onlineUsers.add(receiver.readLine());
 
+                // All user
+                for (int i = 0; i < currentOnlineUser - 1; i++) {
+                    this.onlineUsers.add(receiver.readLine());
+                }
+
+                // Update chat screen
                 Main.chatScreen.updateInfoServer();
                 Main.chatScreen.updateOnlineUser();
 
+                // Communicator
                 new Thread(() -> {
                     try {
                         Communicator clientCommunicator = new Communicator(socket, receiver, sender);
@@ -70,8 +77,13 @@ public class SocketManager {
                     }
                 }).start();
             } else {
-                Main.chatScreen.closeresetData();
+                // Reset chat screen data
+                if (Main.chatScreen != null) Main.chatScreen.closeresetData();
+
+                // Back to server screen
                 Main.serverScreen = new ServerScreen();
+
+                // Notify Dialog
                 JOptionPane.showMessageDialog(new JDialog(), "Đã tồn tại user này trên server", "Thông báo",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -79,6 +91,31 @@ public class SocketManager {
             e1.printStackTrace();
         }
     }
+    // Logout from server by close socket
+    public void Logout() {
+        try {
+            socket.close();
+            receiver = null;
+            sender = null;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    // Send message to user through server
+    public void SendMessage(String toUser, String message) {
+        try {
+            // Send Header
+            sender.write("send message"); sender.newLine();
+            sender.write(userName); sender.newLine(); // From
+            sender.write(toUser); sender.newLine(); // To
+            sender.write(message); sender.newLine(); // Message
+            sender.flush();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 
     // Send message to server
     public void sendTextToRoom(int roomID, String content) {

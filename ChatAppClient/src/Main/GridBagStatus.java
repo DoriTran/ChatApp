@@ -31,7 +31,7 @@ public class GridBagStatus extends GridBagConstraints {
         this.fill = fill;
         return this;
     }
-    public GridBagStatus setWeight(Double weightX, Double weightY) {
+    public GridBagStatus setWeight(double weightX, double weightY) {
         this.weightx = weightX;
         this.weighty = weightY;
         return this;

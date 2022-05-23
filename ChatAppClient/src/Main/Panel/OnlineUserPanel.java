@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 
 public class OnlineUserPanel extends JPanel {
     // Test Data
-    private Object[][] data = {{"Alice 1"},{"Alice 2"},{"Alice 3"},{"Alice 4"},{"Alice 5"},{"Alice 6"},{"Alice 7"},{"Alice 8"},{"Alice 9"},{"Alice 10"},{"Alice 11"},{"Alice 12"},{"Alice 13"},{"Alice 14"},{"Alice 15"},{"Alice 16"},{"Alice 17"},{"Alice 18"}};
     private String[] colName = {"UserName"};
 
     // Component
@@ -39,21 +38,23 @@ public class OnlineUserPanel extends JPanel {
         scrollPane = new JScrollPane(table,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Số user online: 1 "));
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Số user online: 0 "));
         this.add(scrollPane, status.setGrid(1,1).setInsets(0));
     }
 
     // Table Update
     public void updateTable() {
         // Update table
-        table.setModel(new DefaultTableModel((Object[][]) Main.socketManager.onlineUsers.toArray(), colName) {
+        table.setModel(new DefaultTableModel(DataManager.convert1Dto2D(Main.socketManager.onlineUsers.toArray()) , colName) {
             public boolean isCellEditable(int row, int column)
             {
                 return (column == 0);
             }
         });
         table.getTableHeader().setUI(null);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Số user online: " + Main.socketManager.onlineUsers.size() + " "));
+        if (scrollPane != null) {
+            scrollPane.setBorder(BorderFactory.createTitledBorder("Số user online: " + Main.socketManager.onlineUsers.size() + " "));
+        }
 
         // Table Button
         table.getColumnModel().getColumn(0).setCellRenderer(new TableButtonRenderer());
@@ -71,5 +72,13 @@ public class OnlineUserPanel extends JPanel {
 
         // Table font
         table.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+        // Table Edit
+        table.setDefaultEditor(Object.class, null);
+    }
+
+    // Panel support function
+    public String getSelectedUser() {
+        return table.getValueAt(table.getSelectedRow(), 0).toString();
     }
 }

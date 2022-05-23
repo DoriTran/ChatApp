@@ -10,10 +10,10 @@ public class MessagePanel extends JPanel {
     public JLabel message;
 
     // Constructor
-    public MessagePanel(int Direction) {
-        sender = new JLabel("Sender: ", Direction);
-        message = new JLabel("Message . . . !", Direction);
-        format(new Color(209,243,255));
+    public MessagePanel( String Message) {
+        sender = new JLabel("", SwingConstants.CENTER);
+        message = new JLabel(Message, SwingConstants.CENTER);
+        format(new Color(255, 222, 244));
     }
 
     public MessagePanel(String Sender, String Message, int Direction) {
@@ -25,7 +25,7 @@ public class MessagePanel extends JPanel {
     // Format
     private void format(Color color) {
         this.setLayout(new GridBagLayout());
-        this.setPreferredSize(new Dimension(600, 60));
+        this.setPreferredSize(new Dimension(600, (int) (sender.getPreferredSize().height + message.getPreferredSize().height * 1.5 + 20)));
         GridBagStatus status = new GridBagStatus().setWeight(1.0,0.1);
 
         sender.setFont(new Font("Tahoma", Font.BOLD, 16));

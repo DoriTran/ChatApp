@@ -169,13 +169,19 @@ public class ServerScreen extends JFrame implements ActionListener {
 
         // Table font
         tableServer.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+        // Table Edit
+        tableServer.setDefaultEditor(Object.class, null);
     }
 
     // Client Data to Table
     public void updateClientTable() {
-        Object[][] data = {{"Đông 1"},{"Đông 2"},{"Đông 3"},{"Đông 4"},{"Đông 5"}};
+        // Update ScrollPane
+        if (clientScrollPane != null)
+            clientScrollPane.setBorder(BorderFactory.createTitledBorder("Số client đang kết nối: " + SocketManager.clientInfos.size() + " "));
+
         // Update table
-        tableClient.setModel(new DefaultTableModel(data, columnClientTable));
+        tableClient.setModel(new DefaultTableModel(SocketManager.getConnectedClients(), columnClientTable));
 
         // Table Col Width
         tableClient.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -188,6 +194,9 @@ public class ServerScreen extends JFrame implements ActionListener {
 
         // Table font
         tableClient.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+        // Table Edit
+        tableClient.setDefaultEditor(Object.class, null);
     }
 
     @Override
@@ -287,7 +296,7 @@ public class ServerScreen extends JFrame implements ActionListener {
                             }
 
                             // Add server
-                            DataManager.addServer(new ServerInfo(ServerName, ServerPort, true));
+                            DataManager.addServer(new ServerInfo(ServerName, ServerPort, false));
 
                             // Updating
                             updateServerTable();
@@ -336,6 +345,9 @@ public class ServerScreen extends JFrame implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // Delete server
+                        if (tableServer.getValueAt(tableServer.getSelectedRow(), 2).toString().equals("Đang hoạt động")) {
+                            SocketManager.closeServer();
+                        }
                         DataManager.removeServer(tableServer.getSelectedRow());
 
                         // Dispose Dialog

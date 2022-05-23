@@ -9,52 +9,43 @@ import java.util.ArrayList;
 public class ConversationPanel extends JPanel {
     // Data
     private ArrayList<MessagePanel> messages = new ArrayList<MessagePanel>();
-    GridBagStatus status = new GridBagStatus().setAnchor(GridBagConstraints.NORTH);
+    private String toUser = "";
+    private GridBagStatus status = new GridBagStatus().setAnchor(GridBagConstraints.NORTH);
 
     // Constructor
     public ConversationPanel() {
         // Test Data
-        messages.add(new MessagePanel("Alice", "Xin chào!", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Mình là Alice", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Rất vui được gặp bạn <3", SwingConstants.LEFT));
-
-        messages.add(new MessagePanel("Đông", "Xin chào bạn!", SwingConstants.RIGHT));
-        messages.add(new MessagePanel("Đông", "Mình tên là Đông", SwingConstants.RIGHT));
-        messages.add(new MessagePanel("Đông", "Bạn có thể gọi mình là Đông Trần", SwingConstants.RIGHT));
-
-        messages.add(new MessagePanel("Alice", "Xin chào Đông Trần !!!", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học lập trình hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học lập trình hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học lập trình hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học lập trình hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học \nlập trình\n hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học \nlập trình hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học lập trình hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học lập trình hôm nay không?", SwingConstants.LEFT));
-        messages.add(new MessagePanel("Alice", "Bạn có muốn học khóa học lập trình hôm nay không?", SwingConstants.LEFT));
+        messages.add(new MessagePanel("Chọn user đang online để trò chuyện"));
 
         // Format
         this.setLayout(new GridBagLayout());
-        reformat();
+        this.add(messages.get(0), status.setGrid(1,1));
     }
 
-    // HTML format
-    private String formatToHTML(String message) {
-        message.replace("\n", "<br>");
-        return "<html>" + message + "</html>";
-    }
+    public ConversationPanel(String UserName) {
+        // Data
+        this.toUser = UserName;
+        messages.add(new MessagePanel("Bắt đầu cuộc trò chuyện với " + UserName));
+        this.add(messages.get(0), status.setGrid(1,1));
 
-    // Format
-    public void reformat() {
-        this.removeAll();
-        for (int index = 0; index < messages.size(); index++) {
-            this.add(messages.get(index), status.setGrid(1,index + 1));
-        }
+        // Format
+        this.setLayout(new GridBagLayout());
     }
 
     // Add new message
     public void addMessage(String sender, String message, boolean isFromMe) {
-        messages.add(new MessagePanel(sender, formatToHTML(message), isFromMe ? GridBagConstraints.EAST : GridBagConstraints.WEST));
-        this.add(messages.get(messages.size() - 1), status.setGrid(1,messages.size()));
+        messages.add(new MessagePanel(sender, message, isFromMe ? SwingConstants.RIGHT : SwingConstants.LEFT));
+        this.add(messages.get(messages.size() - 1), status.setGrid(0, messages.size()));
+    }
+
+    // Add offline message
+    public void addOfflineMessage() {
+        messages.add(new MessagePanel(this.toUser + " đã offline - Nhấn gửi để xóa khung chat"));
+        this.add(messages.get(0), status.setGrid(1, messages.size() - 1));
+    }
+
+    // Get to User
+    public String getToUser() {
+        return this.toUser;
     }
 }

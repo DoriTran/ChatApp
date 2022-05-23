@@ -41,6 +41,14 @@ public class Communicator extends Thread {
                         String offUser = receiver.readLine();
                         Main.socketManager.onlineUsers.remove(offUser);
                         Main.chatScreen.updateOnlineUser();
+                        System.out.println("OffUser? " + offUser);
+                        Main.chatScreen.offlineMessage(offUser);
+                        break;
+                    }
+                    case "new message": {
+                        String fromUser = receiver.readLine();
+                        String message = receiver.readLine();
+                        Main.chatScreen.addNewMessage(fromUser, message);
                         break;
                     }
                     case "download file": {
@@ -67,11 +75,14 @@ public class Communicator extends Thread {
             }
         } catch (IOException e) {
             try {
-                Main.socketManager.socket.close();
+                if (Main.socketManager != null)
+                    Main.socketManager.socket.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             } finally {
                 Main.serverScreen = new ServerScreen();
+                Main.chatScreen.setVisible(false);
+                Main.chatScreen.dispose();
             }
         }
     }

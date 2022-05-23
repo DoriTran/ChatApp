@@ -54,4 +54,14 @@ public class InputMessagePanel extends JPanel {
         sendButton.setPreferredSize(new Dimension(60,50));
         this.add(sendButton, status.setGrid(3,1).setWitdh(1).setInsets(0,0, 0, 0));
     }
+
+    // Get Input Message
+    public String getInputMessage() {
+        // Get Input
+        String input = this.inputMessage.getText();
+        System.out.println(input);
+        // Format to html
+        String formattedInput = input.replace("\n", "<br>");
+        return "<html>" + formattedInput + "</html>";
+    }
 }

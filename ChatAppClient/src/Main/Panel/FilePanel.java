@@ -68,5 +68,8 @@ public class FilePanel extends JPanel {
 
         // Table font
         table.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+        // Table Edit
+        table.setDefaultEditor(Object.class, null);
     }
 }

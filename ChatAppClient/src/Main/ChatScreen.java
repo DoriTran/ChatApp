@@ -1,6 +1,7 @@
 package Main;
 
 import Main.Panel.*;
+import Networking.SocketManager;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -9,23 +10,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ChatScreen extends JFrame implements ActionListener {
-    String UserName = "Unknown";
+    // Data
+    private String UserName = "Unknown";
 
     // Panel
-    InfoPanel infoPanel; // Top
+    private InfoPanel infoPanel; // Top
 
-    OnlineUserPanel onlineUserPanel; // Left
-    ChatPanel chatPanel; // Mid
-    FilePanel filePanel; // Right
+    private OnlineUserPanel onlineUserPanel; // Left
+    private ChatPanel chatPanel; // Mid
+    private FilePanel filePanel; // Right
 
-    InputMessagePanel inputMessagePanel; // Bottom
+    private InputMessagePanel inputMessagePanel; // Bottom
 
     // FileChooser
-    JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+    private JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
     // Constructor
     public ChatScreen(String UserName) {
-        // Main Split Panel
+        // Main Panel
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagStatus status = new GridBagStatus();
 
@@ -51,6 +53,7 @@ public class ChatScreen extends JFrame implements ActionListener {
         inputMessagePanel.setPreferredSize(new Dimension(600,60));
         mainPanel.add(inputMessagePanel, status.setGrid(2,3).setWitdh(1).setHeight(1));
 
+        // Frame
         this.setTitle("Client - Chat");
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +70,13 @@ public class ChatScreen extends JFrame implements ActionListener {
         onlineUserPanel.updateTable();
     }
 
-    /* Conversation panel function (Mid) */
+    /* Chat panel function (Mid) */
+    public void addNewMessage(String from, String message) {
+        chatPanel.addOtherUserNewMassage(from, message);
+    }
+    public void offlineMessage(String whoOffline) {
+        chatPanel.userChatOffline(whoOffline);
+    }
 
     /* File panel function (Right) */
 
@@ -75,6 +84,7 @@ public class ChatScreen extends JFrame implements ActionListener {
 
     // Close Chatscreen
     public void closeresetData() {
+        Main.socketManager = null;
         setVisible(false);
         dispose();
     }
@@ -82,8 +92,23 @@ public class ChatScreen extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "test":
-                System.out.println("Test complete!");
+            case "exit": {
+                Main.socketManager.Logout();
+                closeresetData();
+                break;
+            }
+
+            // OnlineUserPanel event
+            case "chat": {
+                chatPanel.changeUserConversation(onlineUserPanel.getSelectedUser());
+                break;
+            }
+
+            // InputMessagePanel event
+            case "send": {
+                chatPanel.addMyNewMessage(inputMessagePanel.getInputMessage());
+                break;
+            }
         }
     }
 }

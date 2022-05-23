@@ -8,11 +8,12 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class SocketManager {
     static public ServerInfo serverInfo;
-    static public LinkedList<ClientInfo> clientInfos;
+    static public LinkedList<ClientInfo> clientInfos = new LinkedList<>();
     static public String serverIP;
     static public ServerSocket serverSocket;
 
@@ -32,6 +33,15 @@ public class SocketManager {
 
     static public void addNewClient(ClientInfo clientInfo) {
         clientInfos.addLast(clientInfo);
+    }
+
+    static public Object[][] getConnectedClients() {
+        if (clientInfos.isEmpty()) return null;
+        Object[][] data = new Object[clientInfos.size()][1];
+        for (int i = 0; i < clientInfos.size(); i++) {
+            data[i][0] = clientInfos.get(i).UserName;
+        }
+        return data;
     }
 
     static public void openServer() {

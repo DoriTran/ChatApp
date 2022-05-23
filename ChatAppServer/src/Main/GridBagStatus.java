@@ -31,7 +31,7 @@ public class GridBagStatus extends GridBagConstraints {
         this.fill = fill;
         return this;
     }
-    public GridBagStatus setWeight(Integer weightX, Integer weightY) {
+    public GridBagStatus setWeight(double weightX, double weightY) {
         this.weightx = weightX;
         this.weighty = weightY;
         return this;
@@ -42,6 +42,13 @@ public class GridBagStatus extends GridBagConstraints {
     }
     public GridBagStatus setInsets(Integer top, Integer left, Integer bottom, Integer right) {
         this.insets = new Insets(top, left, bottom, right);
+        return this;
+    }
+    public GridBagStatus setAnchor(Integer value) {
+        this.anchor = value;
+        return this;
+    }
+    public GridBagStatus getThis() {
         return this;
     }
 }

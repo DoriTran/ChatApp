@@ -1,6 +1,7 @@
 package Main;
 
 import Data.*;
+import Networking.SocketManager;
 import TableButton.TableButtonRenderer;
 import TableButton.TableRenderer;
 
@@ -149,6 +150,9 @@ public class ServerScreen extends JFrame implements ActionListener {
 
         // Table font
         table.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+        // Table Edit
+        table.setDefaultEditor(Object.class, null);
     }
 
     @Override
@@ -260,6 +264,14 @@ public class ServerScreen extends JFrame implements ActionListener {
                 break;
             }
             case "join": {
+                // Checking server
+                if (!DataManager.isServerAtIndexOnline(table.getSelectedRow())) {
+                    JOptionPane.showMessageDialog(new JDialog(), "Server không hoạt động", "Thông báo",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                }
+
+                // Joining
                 JDialog joinDialog = new JDialog();
 
                 // Create Panel
@@ -291,9 +303,9 @@ public class ServerScreen extends JFrame implements ActionListener {
                         Integer ServerPort = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 2).toString());
 
                         // Join server
-
-
+                        Main.socketManager = new SocketManager(DataManager.serverInfos.get(table.getSelectedRow()), tf_UserName.getText());
                         Main.chatScreen = new ChatScreen(tf_UserName.getText());
+                        Main.socketManager.Login();
                         setVisible(false);
                         dispose();
 

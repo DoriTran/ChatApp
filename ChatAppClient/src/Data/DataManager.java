@@ -26,6 +26,10 @@ public class DataManager {
 
     // File handle
     public static void readServers() throws IOException {
+        if (!serverInfos.isEmpty()) {
+            updateServer();
+            return;
+        }
         // Load data from file
         BufferedReader bufferedReader = new BufferedReader(new FileReader("Server.txt"));
 
@@ -72,5 +76,16 @@ public class DataManager {
     public static boolean isExist(ServerInfo serverInfo) {
         return serverInfos.contains(serverInfo);
     }
+    public static boolean isServerAtIndexOnline(int index) {
+        return ServerInfo.isServerOnline(serverInfos.get(index).serverIP, serverInfos.get(index).serverPort);
+    }
 
+    // Algorithm Support
+    public static Object[][] convert1Dto2D(Object[] object) {
+        Object[][] result = new Object[object.length][1];
+        for (int i = 0; i < object.length; i++) {
+            result[i][0] = object[i];
+        }
+        return result;
+    }
 }
