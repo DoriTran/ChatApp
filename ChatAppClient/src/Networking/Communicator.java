@@ -41,8 +41,10 @@ public class Communicator extends Thread {
                         String offUser = receiver.readLine();
                         Main.socketManager.onlineUsers.remove(offUser);
                         Main.chatScreen.updateOnlineUser();
-                        System.out.println("OffUser? " + offUser);
                         Main.chatScreen.offlineMessage(offUser);
+                        Main.chatScreen.offlineFile(offUser);
+                        if (Main.socketManager.onlineUsers.isEmpty())
+                            Main.chatScreen.setInputMessagePanelEnable(false);
                         break;
                     }
                     case "new message": {
@@ -51,26 +53,38 @@ public class Communicator extends Thread {
                         Main.chatScreen.addNewMessage(fromUser, message);
                         break;
                     }
+                    case "new file notification": {
+                        String fromUser = receiver.readLine();
+                        String newFileName = receiver.readLine();
+                        Main.chatScreen.addNewFile(fromUser, newFileName);
+                        break;
+                    }
+                    case "file download request": {
+                        String fromUser = receiver.readLine();
+                        Integer requestedFileIndex = Integer.parseInt(receiver.readLine());
+                        Main.socketManager.SendFileRequested(fromUser, requestedFileIndex);
+                        break;
+                    }
                     case "download file": {
-                        int fileSize = Integer.parseInt(receiver.readLine());
-                        File file = new File(Main.socketManager.downloadToPath);
+                        // File info
+                        String fileName = receiver.readLine();
+                        Integer fileLength = Integer.parseInt(receiver.readLine());
+
+                        // Download file
+                        File file = new File(Main.socketManager.downloadToPath + "/" + fileName);
                         byte[] buffer = new byte[1024];
                         InputStream in = socket.getInputStream();
                         OutputStream out = new FileOutputStream(file);
 
-                        int count;
-                        int receivedFileSize = 0;
-                        while ((count = in.read(buffer)) > 0) {
+                        for (int receivedSize = 0, count = 0; (count = in.read(buffer)) > 0; ) {
                             out.write(buffer, 0, count);
-                            receivedFileSize += count;
-                            if (receivedFileSize >= fileSize)
-                                break;
-                        }
+                            receivedSize += count;
+                            if (receivedSize >= fileLength) break;
 
+                        }
                         out.close();
                         break;
                     }
-
                 }
             }
         } catch (IOException e) {

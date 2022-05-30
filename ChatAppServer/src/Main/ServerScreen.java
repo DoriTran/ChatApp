@@ -9,6 +9,7 @@ import TableButton.TableRenderer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -120,6 +121,7 @@ public class ServerScreen extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setVisible(true);
     }
 
@@ -297,6 +299,11 @@ public class ServerScreen extends JFrame implements ActionListener {
 
                             // Add server
                             DataManager.addServer(new ServerInfo(ServerName, ServerPort, false));
+                            try {
+                                DataManager.uploadSaves();
+                            } catch (IOException exception) {
+                                exception.printStackTrace();
+                            }
 
                             // Updating
                             updateServerTable();

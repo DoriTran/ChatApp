@@ -8,3 +8,4 @@ Server G,localhost,1006
 Server H,localhost,1007
 Server I,localhost,2000
 My New Server,localhost,2001
+MyNewServer,10.0.138.148,1234

@@ -38,12 +38,6 @@ public class ConversationPanel extends JPanel {
         this.add(messages.get(messages.size() - 1), status.setGrid(0, messages.size()));
     }
 
-    // Add offline message
-    public void addOfflineMessage() {
-        messages.add(new MessagePanel(this.toUser + " đã offline - Nhấn gửi để xóa khung chat"));
-        this.add(messages.get(0), status.setGrid(1, messages.size() - 1));
-    }
-
     // Get to User
     public String getToUser() {
         return this.toUser;

@@ -23,10 +23,16 @@ public class ChatScreen extends JFrame implements ActionListener {
     private InputMessagePanel inputMessagePanel; // Bottom
 
     // FileChooser
-    private JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+    private JFileChooser fileChooser;
+    private JFileChooser folderChooser;
 
     // Constructor
     public ChatScreen(String UserName) {
+        // FileChooser
+        fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+        folderChooser = new JFileChooser(FileSystemView.getFileSystemView());
+        folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
         // Main Panel
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagStatus status = new GridBagStatus();
@@ -59,6 +65,7 @@ public class ChatScreen extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setVisible(true);
     }
 
@@ -79,8 +86,23 @@ public class ChatScreen extends JFrame implements ActionListener {
     }
 
     /* File panel function (Right) */
+    public void addNewFile(String from, String fileName) {
+        filePanel.addReceiveFile(from, fileName);
+    }
+    public void offlineFile(String whoOffline) {
+        filePanel.userFileOffline(whoOffline);
+    }
+    public String getRequestedFilePath(String whoRequested, Integer fileIndex) {
+        return filePanel.getRequestedFilePath(whoRequested, fileIndex);
+    }
+    public String getRequestedFileName(String whoRequested, Integer fileIndex) {
+        return filePanel.getRequestedFileName(whoRequested, fileIndex);
+    }
 
     /* Input panel function (Bottom) */
+    public void setInputMessagePanelEnable(boolean enable) {
+        this.inputMessagePanel.setEnableButton(enable);
+    }
 
     // Close Chatscreen
     public void closeresetData() {
@@ -97,16 +119,29 @@ public class ChatScreen extends JFrame implements ActionListener {
                 closeresetData();
                 break;
             }
-
             // OnlineUserPanel event
             case "chat": {
                 chatPanel.changeUserConversation(onlineUserPanel.getSelectedUser());
+                filePanel.changeUser(onlineUserPanel.getSelectedUser());
+                inputMessagePanel.setEnableButton(true);
                 break;
             }
-
             // InputMessagePanel event
             case "send": {
                 chatPanel.addMyNewMessage(inputMessagePanel.getInputMessage());
+                inputMessagePanel.clearInputMessage();
+                break;
+            }
+            case "file": {
+                fileChooser.showOpenDialog(null);
+                filePanel.addSendFile(fileChooser.getSelectedFile().getName(), fileChooser.getSelectedFile().toString());
+                break;
+            }
+            // FilePanel event
+            case "download": {
+                folderChooser.showOpenDialog(null);
+                Main.socketManager.downloadToPath = folderChooser.getSelectedFile().toString();
+                filePanel.requestDownload();
                 break;
             }
         }

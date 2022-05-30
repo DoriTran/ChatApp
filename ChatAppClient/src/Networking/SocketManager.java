@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.*;
@@ -115,7 +114,73 @@ public class SocketManager {
             e1.printStackTrace();
         }
     }
+    // Send file notification to user through server
+    public void SendFileNotification(String toUser, String fileName) {
+        try {
+            // Send Header
+            sender.write("send file notification"); sender.newLine();
+            sender.write(userName); sender.newLine(); // From
+            sender.write(toUser); sender.newLine(); // To
+            sender.write(fileName); sender.newLine(); // fileIndex
+            sender.flush();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+    // Send file download request to user through server
+    public void SendFileDownloadRequest(String toUser, Integer fileIndex) {
+        try {
+            // Send Header
+            sender.write("send file download request"); sender.newLine();
+            sender.write(userName); sender.newLine(); // From
+            sender.write(toUser); sender.newLine(); // To
+            sender.write("" + fileIndex); sender.newLine(); // fileIndex
+            sender.flush();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+    // Send file requested to user through server
+    public void SendFileRequested(String toUser, int fileIndex) {
+        // Check if file exist
+        try {
+            File file = new File(Main.chatScreen.getRequestedFilePath(toUser, fileIndex));
 
+            sender.write("send file response"); sender.newLine();
+            sender.write(userName); sender.newLine(); // From
+            sender.write(toUser); sender.newLine(); // To
+            sender.write(Main.chatScreen.getRequestedFileName(toUser, fileIndex)); sender.newLine(); // fileName
+
+            if (file.exists()) {
+                // File info
+                sender.write("" + file.length()); sender.newLine();
+                sender.flush();
+
+                // Buffer
+                byte[] buffer = new byte[1024];
+                InputStream in = new FileInputStream(file);
+                OutputStream out = socket.getOutputStream();
+
+                // Sending file
+                int count;
+                while ((count = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, count);
+                }
+
+                in.close();
+                out.flush();
+            }
+            else {
+                System.out.println("Cant open file");
+                sender.write("-1"); sender.newLine();
+                sender.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Send message to server
     public void sendTextToRoom(int roomID, String content) {
@@ -129,25 +194,6 @@ public class SocketManager {
             sender.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    // Download file
-    public void downloadFile(int roomID, int fileMessageIndex, String fileName, String downloadToPath) {
-
-        this.downloadToPath = downloadToPath;
-        try {
-            sender.write("request download file");
-            sender.newLine();
-            sender.write("" + roomID);
-            sender.newLine();
-            sender.write("" + fileMessageIndex);
-            sender.newLine();
-            sender.write(fileName);
-            sender.newLine();
-            sender.flush();
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
     }
 }

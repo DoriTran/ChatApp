@@ -5,7 +5,6 @@ import Main.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChatPanel extends JPanel {
@@ -42,8 +41,10 @@ public class ChatPanel extends JPanel {
     // Offline user
     public void userChatOffline(String UserName) {
         ConversationPanel currentDisplay = (ConversationPanel) scrollPane.getViewport().getView();
-        currentDisplay.addOfflineMessage();
         conversations.remove(UserName);
+        scrollPane.setViewportView(new ConversationPanel());
+        scrollPane.setBorder(
+                BorderFactory.createTitledBorder(null, "Hệ thống", TitledBorder.CENTER, TitledBorder.TOP, new Font("Tahoma", Font.PLAIN,25)));
         blink();
     }
 
@@ -56,8 +57,10 @@ public class ChatPanel extends JPanel {
     // Add new message
     public void addMyNewMessage(String message) {
         ConversationPanel currentDisplay = (ConversationPanel) scrollPane.getViewport().getView();
-        conversations.get(currentDisplay.getToUser()).addMessage(Main.socketManager.userName, message, true);
-        Main.socketManager.SendMessage(currentDisplay.getToUser(), message);
+        conversations.get(currentDisplay.getToUser()).addMessage(Main.socketManager.userName,
+                InputMessagePanel.formatToHTML(message, "right") , true);
+        Main.socketManager.SendMessage(currentDisplay.getToUser(),
+                InputMessagePanel.formatToHTML(message, "left"));
         blink();
     }
     public void addOtherUserNewMassage(String from, String message) {

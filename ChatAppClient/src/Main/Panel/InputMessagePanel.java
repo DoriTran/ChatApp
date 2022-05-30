@@ -53,15 +53,30 @@ public class InputMessagePanel extends JPanel {
         sendButton.addActionListener(serverScreenListener);
         sendButton.setPreferredSize(new Dimension(60,50));
         this.add(sendButton, status.setGrid(3,1).setWitdh(1).setInsets(0,0, 0, 0));
+
+        // Visible
+        this.setEnableButton(false);
     }
 
     // Get Input Message
     public String getInputMessage() {
         // Get Input
-        String input = this.inputMessage.getText();
-        System.out.println(input);
-        // Format to html
-        String formattedInput = input.replace("\n", "<br>");
-        return "<html>" + formattedInput + "</html>";
+        return this.inputMessage.getText();
+    }
+    static public String formatToHTML(String message, String alignment) {
+        String formattedInput = message.replace("\n", "<br>");
+        return "<html><body style='text-align: " + alignment + "'>" + formattedInput + "</body></html>";
+    }
+
+    // Clear Input Message
+    public void clearInputMessage() {
+        // Clear Input
+        this.inputMessage.setText("");
+    }
+
+    // Set Visible
+    public void setEnableButton(boolean enable) {
+        this.fileButton.setEnabled(enable);
+        this.sendButton.setEnabled(enable);
     }
 }

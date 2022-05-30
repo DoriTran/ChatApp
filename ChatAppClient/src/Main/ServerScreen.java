@@ -90,6 +90,7 @@ public class ServerScreen extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setVisible(true);
     }
 
@@ -217,7 +218,7 @@ public class ServerScreen extends JFrame implements ActionListener {
 
                             // Check server name
                             if (ServerName.isEmpty()) {
-                                ServerName = "Rename to Server real name";//SocketController.serverName(ip, port);
+                                ServerName = ServerInfo.getServerName(ServerIP,ServerPort);
                             }
 
                             // Check port
@@ -236,6 +237,12 @@ public class ServerScreen extends JFrame implements ActionListener {
 
                             // Add server
                             DataManager.addServer(new ServerInfo(ServerName, ServerIP, ServerPort, false));
+                            try {
+                                DataManager.saveServers();
+                            } catch (IOException exception) {
+                                exception.printStackTrace();
+                            }
+
 
                             // Updating
                             updateTable();

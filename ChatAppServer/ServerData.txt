@@ -7,3 +7,4 @@ Server F,1005
 Server G,1006
 Server H,1007
 Server I,2000
+MyNewServer,1234
