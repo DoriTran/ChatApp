@@ -32,7 +32,7 @@ public class MessagePanel extends JPanel {
         sender.setBackground(color);
         sender.setOpaque(true);
         this.add(sender, status.setGrid(1,1).setInsets(5,5,0,5).setFill(GridBagConstraints.BOTH));
-        message.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        message.setFont(new Font("Dialog", Font.PLAIN, 20));
         message.setBackground(color);
         message.setOpaque(true);
         this.add(message, status.setGrid(1,2).setInsets(0,5,5,5).setFill(GridBagConstraints.BOTH));

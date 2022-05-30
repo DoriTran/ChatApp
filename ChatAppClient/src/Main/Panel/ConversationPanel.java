@@ -26,6 +26,7 @@ public class ConversationPanel extends JPanel {
         // Data
         this.toUser = UserName;
         messages.add(new MessagePanel("Bắt đầu cuộc trò chuyện với " + UserName));
+        //messages.add(new MessagePanel("Hello " + new String( Character.toChars(0x1F601))));
         this.add(messages.get(0), status.setGrid(1,1));
 
         // Format
